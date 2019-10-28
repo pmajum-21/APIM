@@ -1,0 +1,11 @@
+<!-- This policy can be used to create or modify the standard HTTP request and response messages -->
+<AssignMessage async="false" continueOnError="false" enabled="true" xmlns='http://www.sap.com/apimgmt'>
+ <Set>
+      <Headers>
+        <Header name="Authorization">SAML2.0 {saml_response.content}</Header>
+        <Header name="Content-Type">application/json</Header>
+      </Headers>
+    </Set>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

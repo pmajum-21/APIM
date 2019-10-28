@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TargetEndPoint>
+    <name>default</name>
+    <provider_id>SAP_GATEWAY</provider_id>
+    <isDefault>true</isDefault>
+    <relativePath>/sap/opu/odata/SAP/ZCSR_C1V_ECC_BUSINESS_LOCK_CRT_SRV</relativePath>
+    <properties/>
+    <faultRules>
+        <faultRule>
+            <name>GatewayError</name>
+            <condition>(fault.name Matches "ErrorResponseCode")</condition>
+            <steps>
+                <step>
+                    <policy_name>AM_GatewayUnAuth</policy_name>
+                    <condition>(response.status.code = "401")</condition>
+                    <sequence>3</sequence>
+                </step>
+                <step>
+                    <policy_name>AM_GatewayForbid</policy_name>
+                    <condition>(response.status.code = "403")</condition>
+                    <sequence>2</sequence>
+                </step>
+                <step>
+                    <policy_name>AM_GatewayDown</policy_name>
+                    <condition>(response.status.code = "503")</condition>
+                    <sequence>1</sequence>
+                </step>
+            </steps>
+        </faultRule>
+    </faultRules>
+    <defaultFaultRule>
+        <name>defaultfaultRule</name>
+        <alwaysEnforce>true</alwaysEnforce>
+        <steps>
+            <step>
+                <policy_name>JS_DebuggingLog</policy_name>
+                <condition> </condition>
+                <sequence>1</sequence>
+            </step>
+        </steps>
+    </defaultFaultRule>
+    <preFlow>
+        <name>PreFlow</name>
+        <request>
+            <isRequest>true</isRequest>
+            <steps>
+                <step>
+                    <policy_name>AM_SetEncodedSAML</policy_name>
+                    <condition> </condition>
+                    <sequence>2</sequence>
+                </step>
+                <step>
+                    <policy_name>SC_Saml_Response</policy_name>
+                    <condition> </condition>
+                    <sequence>1</sequence>
+                </step>
+            </steps>
+        </request>
+        <response>
+            <isRequest>false</isRequest>
+            <steps>
+                <step>
+                    <policy_name>RC_Response_Cache</policy_name>
+                    <condition> </condition>
+                    <sequence>1</sequence>
+                </step>
+                <step>
+                    <policy_name>JS_DebuggingLog</policy_name>
+                    <condition> </condition>
+                    <sequence>2</sequence>
+                </step>
+            </steps>
+        </response>
+    </preFlow>
+    <postFlow>
+        <name>PostFlow</name>
+        <request>
+            <isRequest>true</isRequest>
+            <steps/>
+        </request>
+    </postFlow>
+    <conditionalFlows/>
+</TargetEndPoint>

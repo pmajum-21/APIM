@@ -1,0 +1,19 @@
+<!-- this policy lets you call to an external service from your API flow -->
+<ServiceCallout async="true" continueOnError="false" enabled="true" xmlns="http://www.sap.com/apimgmt">
+	<Request>
+	    <Set>
+	     <Headers>      
+	     	<Header name="Path">{target.basepath}</Header>
+			<Header name="PathSuffix">{proxy.pathsuffix}</Header>
+			<Header name="Username">{sapResponse.content}</Header>   
+		</Headers>
+		</Set>
+      </Request>
+	<Response>saml_response</Response>
+	<Timeout>30000</Timeout>
+	<LocalTargetConnection>
+   	    <APIProxy>SAML_Response</APIProxy>
+    	   <ProxyEndpoint>default</ProxyEndpoint>
+       </LocalTargetConnection>
+	
+</ServiceCallout>

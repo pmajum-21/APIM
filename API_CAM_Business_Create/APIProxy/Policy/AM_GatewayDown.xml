@@ -1,0 +1,18 @@
+<!-- This policy can be used to create or modify the standard HTTP request and response messages -->
+<AssignMessage async="false" continueOnError="false" enabled="true" xmlns='http://www.sap.com/apimgmt'>
+ 
+	 <Set>
+        <Payload contentType="application/json">
+			{
+		        "error":"SERVER_UNAVIALABLE",
+		        "details": "Backend service is down",
+		        "resolution" : "Contact backend Gateway admin team"
+		    }
+		</Payload>
+        <StatusCode>503</StatusCode>
+        <ReasonPhrase>Service Unavailable</ReasonPhrase>
+    </Set>
+    
+	<IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+	<AssignTo createNew="false" type="response">response</AssignTo>
+</AssignMessage>

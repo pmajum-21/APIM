@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy>
+    <name>API_CAM_Business_Create</name>
+    <title>API_CAM_Business_Create</title>
+    <description> </description>
+    <service_code>ODATA</service_code>
+    <life_cycle>
+        <changed_by>S0020878246</changed_by>
+        <created_by>S0020878246</created_by>
+    </life_cycle>
+    <proxyEndPoints>
+        <proxyEndPoint>
+            <proxyEndPointName>default</proxyEndPointName>
+            <apiResourceName>$batch</apiResourceName>
+            <apiResourceName>ReturnStatusSet</apiResourceName>
+            <apiResourceName>SWAGGER_JSON</apiResourceName>
+            <apiResourceName>BusinessLockDataSet</apiResourceName>
+            <apiResourceName>InteractionRecordSet</apiResourceName>
+            <apiResourceName>InteractionRecordSet('{IRNotes}')</apiResourceName>
+            <apiResourceName>ReturnStatusSet('{ReturnStatusDescription}')</apiResourceName>
+        </proxyEndPoint>
+    </proxyEndPoints>
+    <targetEndPoints>
+        <targetEndPoint>default</targetEndPoint>
+    </targetEndPoints>
+    <policies>
+        <policy type="RaiseFault">RF_RaiseUnAuthorizedError</policy>
+        <policy type="RaiseFault">AM_GatewayUnAuth</policy>
+        <policy type="ServiceCallout">SC_Saml_Response</policy>
+        <policy type="ServiceCallout">SC_Oauth_Call</policy>
+        <policy type="Quota">Q_QuotaCheck</policy>
+        <policy type="RaiseFault">AM_SecureAuthFault</policy>
+        <policy type="Javascript">JS_DebuggingLog</policy>
+        <policy type="SpikeArrest">SA_SpikeArrest</policy>
+        <policy type="ResponseCache">RC_Response_Cache</policy>
+        <policy type="AssignMessage">AM_SetEncodedSAML</policy>
+        <policy type="VerifyAPIKey">VAK_VerifyApiKey</policy>
+        <policy type="RaiseFault">defaultRaiseFaultPolicy</policy>
+        <policy type="RaiseFault">AM_GatewayForbid</policy>
+        <policy type="RaiseFault">AM_GatewayDown</policy>
+    </policies>
+    <fileResources>
+        <fileResource type="js">debuglog</fileResource>
+    </fileResources>
+</APIProxy>

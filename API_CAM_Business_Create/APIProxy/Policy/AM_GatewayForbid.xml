@@ -1,0 +1,18 @@
+<!-- This policy can be used to create or modify the standard HTTP request and response messages -->
+<AssignMessage async="false" continueOnError="false" enabled="true" xmlns='http://www.sap.com/apimgmt'>
+ 
+	<!-- Sets a new value to the existing parameter -->
+	<Set>
+      <Payload contentType="application/json" variablePrefix="@" variableSuffix="#">
+		    {
+		        "error":"AUTHORIZATION_FAILURE",
+		        "details": "Username access forbidden",
+		        "resolution" : "Contact backend Gateway security team"
+		    }
+		</Payload>
+      <StatusCode>403</StatusCode>
+      <ReasonPhrase>Forbidden</ReasonPhrase>
+    </Set>
+	<IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+	<AssignTo createNew="false" type="response">response</AssignTo>
+</AssignMessage>

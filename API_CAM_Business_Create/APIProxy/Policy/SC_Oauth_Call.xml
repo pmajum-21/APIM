@@ -1,0 +1,19 @@
+<!-- this policy lets you call to an external service from your API flow -->
+<ServiceCallout async="true" continueOnError="false" enabled="true" xmlns="http://www.sap.com/apimgmt">
+	<!-- The request that gets sent from the API proxy flow to the external service -->
+		<Request>
+	    <Set>
+	     <Headers>      
+	     	<Header name="Apikey">{request.header.APIKey}</Header>
+			<Header name="authorization">{request.header.Authorization}</Header>   
+		</Headers>
+		</Set>
+      </Request>
+	<Response>sapResponse</Response>
+	<Timeout>30000</Timeout>
+	 <LocalTargetConnection>
+   	    <APIProxy>OAuth_validation</APIProxy>
+    	   <ProxyEndpoint>default</ProxyEndpoint>
+       </LocalTargetConnection>
+	
+</ServiceCallout>

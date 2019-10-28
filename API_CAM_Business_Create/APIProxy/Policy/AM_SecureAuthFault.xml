@@ -1,0 +1,17 @@
+<!-- This policy can be used to create or modify the standard HTTP request and response messages -->
+<AssignMessage async="false" continueOnError="false" enabled="true" xmlns='http://www.sap.com/apimgmt'>
+ 
+	<Set>
+      <Payload contentType="application/json" variablePrefix="@" variableSuffix="#">
+		     {
+		        "error":"OAUTH VALIDATION FAILED",
+		        "details" : "Invalid OAuth token",
+		        "resolution" : "Regenerate fresh OAuth token"
+		    }
+		</Payload>
+      <StatusCode>400</StatusCode>
+      <ReasonPhrase>Bad Request</ReasonPhrase>
+    </Set>
+	<IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+	<AssignTo createNew="false" type="response">response</AssignTo>
+</AssignMessage>

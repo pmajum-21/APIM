@@ -1,0 +1,17 @@
+<!-- This policy can be used to create or modify the standard HTTP request and response messages -->
+<AssignMessage async="false" continueOnError="false" enabled="true" xmlns='http://www.sap.com/apimgmt'>
+ 
+	<Set>
+      <Payload contentType="application/json" variablePrefix="@" variableSuffix="#">
+		    {
+		        "error":"AUTHENTICATION_FAILURE",
+		        "details": "Username is unauthorized",
+		        "resolution" : "Contact backend Gateway security team"
+		    }
+		</Payload>
+      <StatusCode>401</StatusCode>
+      <ReasonPhrase>Unauthorized</ReasonPhrase>
+    </Set>
+	<IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+	<AssignTo createNew="false" type="response">response</AssignTo>
+</AssignMessage>

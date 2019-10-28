@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndPoint default="true">
+    <name>default</name>
+    <base_path>/ZCSR_C1V_ECC_BUSINESS_LOCK_CRT_SRV</base_path>
+    <properties/>
+    <routeRules>
+        <routeRule>
+            <name>default</name>
+            <targetEndPointName>default</targetEndPointName>
+            <sequence>1</sequence>
+            <faultRules/>
+        </routeRule>
+    </routeRules>
+    <faultRules>
+        <faultRule>
+            <name>SecureAuthFault</name>
+            <steps>
+                <step>
+                    <policy_name>AM_SecureAuthFault</policy_name>
+                    <condition>(fault.name Matches "ExecutionFailed")</condition>
+                    <sequence>1</sequence>
+                </step>
+            </steps>
+        </faultRule>
+    </faultRules>
+    <preFlow>
+        <name>PreFlow</name>
+        <request>
+            <isRequest>true</isRequest>
+            <steps>
+                <step>
+                    <policy_name>RF_RaiseUnAuthorizedError</policy_name>
+                    <condition>(request.header.Authorization = null or request.header.Authorization = "") or (request.header.APIKey = null or request.header.APIKey = "")</condition>
+                    <sequence>1</sequence>
+                </step>
+                <step>
+                    <policy_name>VAK_VerifyApiKey</policy_name>
+                    <condition> </condition>
+                    <sequence>2</sequence>
+                </step>
+                <step>
+                    <policy_name>SA_SpikeArrest</policy_name>
+                    <condition> </condition>
+                    <sequence>3</sequence>
+                </step>
+                <step>
+                    <policy_name>Q_QuotaCheck</policy_name>
+                    <condition> </condition>
+                    <sequence>4</sequence>
+                </step>
+                <step>
+                    <policy_name>SC_Oauth_Call</policy_name>
+                    <condition> </condition>
+                    <sequence>5</sequence>
+                </step>
+            </steps>
+        </request>
+        <response>
+            <isRequest>false</isRequest>
+            <steps/>
+        </response>
+    </preFlow>
+    <postFlow>
+        <name>PostFlow</name>
+        <request>
+            <isRequest>true</isRequest>
+            <steps/>
+        </request>
+        <response>
+            <isRequest>false</isRequest>
+            <steps/>
+        </response>
+    </postFlow>
+    <conditionalFlows>
+        <conditionalFlow>
+            <name>ReturnStatusSet('{ReturnStatusDescription}')</name>
+            <conditions>(proxy.pathsuffix MatchesPath "/ReturnStatusSet('*')" OR proxy.pathsuffix MatchesPath "/ReturnStatusSet('*')/**" OR proxy.pathsuffix MatchesPath "/ReturnStatusSet('*')(**" OR proxy.pathsuffix MatchesPath "/ReturnStatusSet(%%27*%%27)" OR proxy.pathsuffix MatchesPath "/ReturnStatusSet(%%27*%%27)/**" OR proxy.pathsuffix MatchesPath "/ReturnStatusSet(%%27*%%27)(**") AND (request.verb = "POST")</conditions>
+            <readOnly>true</readOnly>
+            <sequence>8</sequence>
+        </conditionalFlow>
+        <conditionalFlow>
+            <name>BusinessLockDataSet(BusinessPartner='{BusinessPartner}',ContractAccount='{ContractAccount}',ProcessID='{ProcessID}',LockType='{LockType}',LockReason='{LockReason}',StartDate='{StartDate}',EndDate='{EndDate}')</name>
+            <conditions>(proxy.pathsuffix MatchesPath "/BusinessLockDataSet(BusinessPartner='*',ContractAccount='*',ProcessID='*',LockType='*',LockReason='*',StartDate='*',EndDate='*')" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet(BusinessPartner='*',ContractAccount='*',ProcessID='*',LockType='*',LockReason='*',StartDate='*',EndDate='*')/**" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet(BusinessPartner='*',ContractAccount='*',ProcessID='*',LockType='*',LockReason='*',StartDate='*',EndDate='*')(**" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet(BusinessPartner=%%27*%%27,ContractAccount=%%27*%%27,ProcessID=%%27*%%27,LockType=%%27*%%27,LockReason=%%27*%%27,StartDate=%%27*%%27,EndDate=%%27*%%27)" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet(BusinessPartner=%%27*%%27,ContractAccount=%%27*%%27,ProcessID=%%27*%%27,LockType=%%27*%%27,LockReason=%%27*%%27,StartDate=%%27*%%27,EndDate=%%27*%%27)/**" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet(BusinessPartner=%%27*%%27,ContractAccount=%%27*%%27,ProcessID=%%27*%%27,LockType=%%27*%%27,LockReason=%%27*%%27,StartDate=%%27*%%27,EndDate=%%27*%%27)(**") AND (request.verb = "POST")</conditions>
+            <readOnly>true</readOnly>
+            <sequence>4</sequence>
+        </conditionalFlow>
+        <conditionalFlow>
+            <name>$batch</name>
+            <conditions>(proxy.pathsuffix MatchesPath "/$batch" OR proxy.pathsuffix MatchesPath "/$batch/**" OR proxy.pathsuffix MatchesPath "/$batch(**")AND(request.verb = "POST")</conditions>
+            <readOnly>true</readOnly>
+            <sequence>3</sequence>
+        </conditionalFlow>
+        <conditionalFlow>
+            <name>BusinessLockDataSet</name>
+            <conditions>(proxy.pathsuffix MatchesPath "/BusinessLockDataSet" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet/**" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet(**")AND(request.verb = "POST")</conditions>
+            <readOnly>true</readOnly>
+            <sequence>1</sequence>
+        </conditionalFlow>
+        <conditionalFlow>
+            <name>ReturnStatusSet</name>
+            <conditions>(proxy.pathsuffix MatchesPath "/ReturnStatusSet" OR proxy.pathsuffix MatchesPath "/ReturnStatusSet/**" OR proxy.pathsuffix MatchesPath "/ReturnStatusSet(**")AND(request.verb = "POST")</conditions>
+            <readOnly>true</readOnly>
+            <sequence>9</sequence>
+        </conditionalFlow>
+        <conditionalFlow>
+            <name>InteractionRecordSet('{IRNotes}')</name>
+            <conditions>(proxy.pathsuffix MatchesPath "/InteractionRecordSet('*')" OR proxy.pathsuffix MatchesPath "/InteractionRecordSet('*')/**" OR proxy.pathsuffix MatchesPath "/InteractionRecordSet('*')(**" OR proxy.pathsuffix MatchesPath "/InteractionRecordSet(%%27*%%27)" OR proxy.pathsuffix MatchesPath "/InteractionRecordSet(%%27*%%27)/**" OR proxy.pathsuffix MatchesPath "/InteractionRecordSet(%%27*%%27)(**") AND (request.verb = "POST")</conditions>
+            <readOnly>true</readOnly>
+            <sequence>6</sequence>
+        </conditionalFlow>
+        <conditionalFlow>
+            <name>BusinessLockDataSet(BusinessPartner='{BusinessPartner}',ContractAccount='{ContractAccount}',ProcessID='{ProcessID}',LockType='{LockType}',LockReason='{LockReason}',StartDate='{StartDate}',EndDate='{EndDate}')_ReturnStatusNav</name>
+            <conditions>(proxy.pathsuffix MatchesPath "/BusinessLockDataSet(BusinessPartner='*',ContractAccount='*',ProcessID='*',LockType='*',LockReason='*',StartDate='*',EndDate='*')/ReturnStatusNav" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet(BusinessPartner='*',ContractAccount='*',ProcessID='*',LockType='*',LockReason='*',StartDate='*',EndDate='*')/ReturnStatusNav/**" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet(BusinessPartner='*',ContractAccount='*',ProcessID='*',LockType='*',LockReason='*',StartDate='*',EndDate='*')/ReturnStatusNav(**" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet(BusinessPartner=%%27*%%27,ContractAccount=%%27*%%27,ProcessID=%%27*%%27,LockType=%%27*%%27,LockReason=%%27*%%27,StartDate=%%27*%%27,EndDate=%%27*%%27)/ReturnStatusNav" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet(BusinessPartner=%%27*%%27,ContractAccount=%%27*%%27,ProcessID=%%27*%%27,LockType=%%27*%%27,LockReason=%%27*%%27,StartDate=%%27*%%27,EndDate=%%27*%%27)/ReturnStatusNav/**" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet(BusinessPartner=%%27*%%27,ContractAccount=%%27*%%27,ProcessID=%%27*%%27,LockType=%%27*%%27,LockReason=%%27*%%27,StartDate=%%27*%%27,EndDate=%%27*%%27)/ReturnStatusNav(**") AND (request.verb = "POST")</conditions>
+            <readOnly>true</readOnly>
+            <sequence>2</sequence>
+        </conditionalFlow>
+        <conditionalFlow>
+            <name>BusinessLockDataSet(BusinessPartner='{BusinessPartner}',ContractAccount='{ContractAccount}',ProcessID='{ProcessID}',LockType='{LockType}',LockReason='{LockReason}',StartDate='{StartDate}',EndDate='{EndDate}')_IRNotesNav</name>
+            <conditions>(proxy.pathsuffix MatchesPath "/BusinessLockDataSet(BusinessPartner='*',ContractAccount='*',ProcessID='*',LockType='*',LockReason='*',StartDate='*',EndDate='*')/IRNotesNav" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet(BusinessPartner='*',ContractAccount='*',ProcessID='*',LockType='*',LockReason='*',StartDate='*',EndDate='*')/IRNotesNav/**" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet(BusinessPartner='*',ContractAccount='*',ProcessID='*',LockType='*',LockReason='*',StartDate='*',EndDate='*')/IRNotesNav(**" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet(BusinessPartner=%%27*%%27,ContractAccount=%%27*%%27,ProcessID=%%27*%%27,LockType=%%27*%%27,LockReason=%%27*%%27,StartDate=%%27*%%27,EndDate=%%27*%%27)/IRNotesNav" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet(BusinessPartner=%%27*%%27,ContractAccount=%%27*%%27,ProcessID=%%27*%%27,LockType=%%27*%%27,LockReason=%%27*%%27,StartDate=%%27*%%27,EndDate=%%27*%%27)/IRNotesNav/**" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet(BusinessPartner=%%27*%%27,ContractAccount=%%27*%%27,ProcessID=%%27*%%27,LockType=%%27*%%27,LockReason=%%27*%%27,StartDate=%%27*%%27,EndDate=%%27*%%27)/IRNotesNav(**") AND (request.verb = "POST")</conditions>
+            <readOnly>true</readOnly>
+            <sequence>5</sequence>
+        </conditionalFlow>
+        <conditionalFlow>
+            <name>InteractionRecordSet</name>
+            <conditions>(proxy.pathsuffix MatchesPath "/InteractionRecordSet" OR proxy.pathsuffix MatchesPath "/InteractionRecordSet/**" OR proxy.pathsuffix MatchesPath "/InteractionRecordSet(**")AND(request.verb = "POST")</conditions>
+            <readOnly>true</readOnly>
+            <sequence>7</sequence>
+        </conditionalFlow>
+        <conditionalFlow>
+            <name>DefaultFaultFlow</name>
+            <request>
+                <isRequest>true</isRequest>
+                <steps>
+                    <step>
+                        <policy_name>defaultRaiseFaultPolicy</policy_name>
+                        <condition> </condition>
+                        <sequence>1</sequence>
+                    </step>
+                </steps>
+            </request>
+            <conditions>proxy.pathsuffix MatchesPath "/InteractionRecordSet('{IRNotes}')" OR proxy.pathsuffix MatchesPath "/InteractionRecordSet('{IRNotes}')/**" OR proxy.pathsuffix MatchesPath "/InteractionRecordSet('{IRNotes}')(**" OR proxy.pathsuffix MatchesPath "/ReturnStatusSet('{ReturnStatusDescription}')" OR proxy.pathsuffix MatchesPath "/ReturnStatusSet('{ReturnStatusDescription}')/**" OR proxy.pathsuffix MatchesPath "/ReturnStatusSet('{ReturnStatusDescription}')(**" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet/**" OR proxy.pathsuffix MatchesPath "/BusinessLockDataSet(**" OR proxy.pathsuffix MatchesPath "/ReturnStatusSet" OR proxy.pathsuffix MatchesPath "/ReturnStatusSet/**" OR proxy.pathsuffix MatchesPath "/ReturnStatusSet(**" OR proxy.pathsuffix MatchesPath "/InteractionRecordSet" OR proxy.pathsuffix MatchesPath "/InteractionRecordSet/**" OR proxy.pathsuffix MatchesPath "/InteractionRecordSet(**" OR proxy.pathsuffix MatchesPath "/$batch" OR proxy.pathsuffix MatchesPath "/$batch/**" OR proxy.pathsuffix MatchesPath "/$batch(**"</conditions>
+            <readOnly>true</readOnly>
+            <sequence>10</sequence>
+        </conditionalFlow>
+    </conditionalFlows>
+</ProxyEndPoint>

@@ -1,0 +1,10 @@
+<ResponseCache async="false" continueOnError="false" enabled="true" xmlns="http://www.sap.com/apimgmt">
+	<CacheKey>
+		<KeyFragment ref="request.uri"></KeyFragment>
+	</CacheKey>
+	<ExpirySettings>
+		<TimeoutInSec ref="">60</TimeoutInSec>
+	</ExpirySettings>
+	<SkipCacheLookup></SkipCacheLookup>
+	<SkipCachePopulation></SkipCachePopulation>
+</ResponseCache>
