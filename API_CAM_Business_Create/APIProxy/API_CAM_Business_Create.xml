@@ -41,5 +41,5 @@
     </policies>
     <fileResources>
         <fileResource type="js">debuglog</fileResource>
-    </fileResources>/
+    </fileResources>
 </APIProxy>
